@@ -298,8 +298,13 @@ h1, h2, h3, h4, h5, h6 {
   width: 55px;
   height: 55px;
   border-radius: 50%;
-  object-fit: cover;
-  box-shadow: var(--shadow-sm);
+  object-fit: contain;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.15));
+  transition: transform var(--transition-fast);
+}
+
+.logo:hover img {
+  transform: scale(1.05);
 }
 
 .logo-text {
