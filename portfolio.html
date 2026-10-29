@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Portfolio | Ebonics Integrated Services Nig Ltd</title>
+  <meta name="description" content="Browse our portfolio of completed projects — buildings, interiors, aluminium works, POP ceilings, and more by Ebonics Integrated Services Nig Ltd.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="images/logo.png" type="image/png">
+  <style>
+    /* ---- Extra portfolio styles ---- */
+    .portfolio-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      padding: 40px 0 20px;
+      flex-wrap: wrap;
+    }
+    .portfolio-stat {
+      text-align: center;
+    }
+    .portfolio-stat .num {
+      font-family: 'Inter', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--sky-600);
+      line-height: 1;
+    }
+    .portfolio-stat .lbl {
+      font-size: 0.85rem;
+      color: var(--text-body);
+      margin-top: 4px;
+    }
+
+    /* Masonry-style grid */
+    .portfolio-masonry {
+      columns: 3;
+      column-gap: 20px;
+      margin-top: 12px;
+    }
+    .portfolio-masonry .p-item {
+      break-inside: avoid;
+      margin-bottom: 20px;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .portfolio-masonry .p-item:hover {
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: var(--shadow-xl);
+    }
+    .portfolio-masonry .p-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .portfolio-masonry .p-item:hover img {
+      transform: scale(1.04);
+    }
+    .portfolio-masonry .p-item .p-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(8,47,73,0.85) 0%, transparent 55%);
+      display: flex;
+      align-items: flex-end;
+      padding: 18px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .portfolio-masonry .p-item:hover .p-overlay {
+      opacity: 1;
+    }
+    .p-overlay .p-label {
+      color: var(--white);
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+    }
+    .p-overlay .p-cat {
+      display: inline-block;
+      background: var(--sky-500);
+      color: var(--white);
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    /* Category section headers */
+    .cat-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 24px;
+    }
+    .cat-header h3 {
+      font-size: 1.4rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      color: var(--text-heading);
+      white-space: nowrap;
+    }
+    .cat-header .cat-line {
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, var(--sky-200), transparent);
+      border-radius: 2px;
+    }
+    .cat-header .cat-badge {
+      background: var(--sky-100);
+      color: var(--sky-700);
+      font-size: 0.78rem;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* Lightbox upgraded */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      flex-direction: column;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 92vw;
+      max-height: 85vh;
+      border-radius: 12px;
+      box-shadow: 0 0 80px rgba(0,0,0,0.6);
+      object-fit: contain;
+    }
+    .lightbox-caption {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9rem;
+      margin-top: 14px;
+      text-align: center;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: var(--white);
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .lightbox-close:hover { background: var(--sky-600); }
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: var(--white);
+      font-size: 1.6rem;
+      cursor: pointer;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .lightbox-nav:hover { background: var(--sky-600); }
+    .lightbox-prev { left: 16px; }
+    .lightbox-next { right: 16px; }
+    .lightbox-counter {
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 900px) {
+      .portfolio-masonry { columns: 2; }
+    }
+    @media (max-width: 560px) {
+      .portfolio-masonry { columns: 1; }
+      .portfolio-stats { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ====== HEADER ====== -->
+  <header class="header scrolled" id="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="Ebonics Logo">
+        <div class="logo-text">
+          <span class="brand-name">EBONICS</span>
+          <span class="brand-tagline">Integrated Services Nig Ltd</span>
+        </div>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="portfolio.html" class="active">Portfolio</a>
+        <a href="contact.html">Contact</a>
+        <a href="contact.html" class="btn btn-primary">Get a Quote</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-overlay" id="navOverlay"></div>
+  </header>
+
+  <!-- ====== PAGE HEADER ====== -->
+  <section class="page-header">
+    <div class="container">
+      <h1>Our Portfolio</h1>
+      <p>Real projects. Real craftsmanship. Real results.</p>
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="separator">/</span>
+        <span class="current">Portfolio</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== STATS BAR ====== -->
+  <section style="background: var(--sky-50); border-bottom: 1px solid var(--sky-100);">
+    <div class="container">
+      <div class="portfolio-stats">
+        <div class="portfolio-stat"><div class="num">63+</div><div class="lbl">Project Photos</div></div>
+        <div class="portfolio-stat"><div class="num">250+</div><div class="lbl">Projects Completed</div></div>
+        <div class="portfolio-stat"><div class="num">10+</div><div class="lbl">Years Experience</div></div>
+        <div class="portfolio-stat"><div class="num">100%</div><div class="lbl">Client Satisfaction</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== PORTFOLIO GALLERY ====== -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Filter Buttons -->
+      <div class="portfolio-filter reveal" id="portfolioFilter">
+        <button class="active" data-filter="all">All Projects</button>
+        <button data-filter="building">Building Construction</button>
+        <button data-filter="ceiling">P.O.P Ceiling</button>
+        <button data-filter="iron">Wrought Iron &amp; Rails</button>
+        <button data-filter="aluminium">Aluminium Works</button>
+        <button data-filter="interior">Interior Design</button>
+      </div>
+
+      <!-- ===== BUILDING CONSTRUCTION ===== -->
+      <div class="cat-header reveal" data-filter-cat="building">
+        <h3>🏗️ Building Construction</h3>
+        <div class="cat-line"></div>
+        <span class="cat-badge">Residential &amp; Commercial</span>
+      </div>
+
+      <div class="portfolio-masonry" id="galleryBuilding">
+        <div class="p-item reveal" data-category="building" data-title="Building Project — Under Construction" data-index="0">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.36.45.jpeg" alt="Building project" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Residential Building</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Story Building — Roofing Stage" data-index="1">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.36.57.jpeg" alt="Building project" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Story Building</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Large Villa — Construction in Progress" data-index="2">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.38.47.jpeg" alt="Villa construction" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Luxury Villa</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Residential Building Project" data-index="3">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.38.52.jpeg" alt="Residential building" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Residential Project</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Multi-Storey Construction" data-index="4">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.38.56.jpeg" alt="Multi-storey" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Multi-Storey Building</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Building Under Construction" data-index="5">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.00.jpeg" alt="Construction" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Construction Works</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Residential Complex" data-index="6">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.01 (1).jpeg" alt="Residential complex" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Residential Complex</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Building Project" data-index="7">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.01.jpeg" alt="Building" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Building Project</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Construction Project" data-index="8">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.02.jpeg" alt="Construction" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Construction Project</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Site Works" data-index="9">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.03 (1).jpeg" alt="Site works" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Site Works</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Building Construction" data-index="10">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.06 (1).jpeg" alt="Building" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Building Construction</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Building Project" data-index="11">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.07.jpeg" alt="Building" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Building Project</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Structural Works" data-index="12">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.08 (1).jpeg" alt="Structural works" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Structural Works</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Building Project" data-index="13">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.08.jpeg" alt="Building" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Building Project</div></div></div>
+        </div>
+
+        <div class="p-item reveal" data-category="building" data-title="Building Works" data-index="15">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.10.jpeg" alt="Building works" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Building Works</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Residential Building" data-index="16">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.12 (1).jpeg" alt="Residential" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Residential Building</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Building Construction" data-index="17">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.12.jpeg" alt="Building" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Building Construction</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Elegant P.O.P Ceiling Design">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.14.jpeg" alt="POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">P.O.P Ceiling Work</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Decorative POP Ceiling">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.18.jpeg" alt="POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Decorative Ceiling</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Multi-Level POP Ceiling">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.19.jpeg" alt="POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Multi-Level Ceiling</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Cove Lighting POP Ceiling">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.20.jpeg" alt="POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Cove Ceiling</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Executive POP Ceiling">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.21.jpeg" alt="POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Executive Ceiling</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="POP Ceiling Design">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.23.jpeg" alt="POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Ceiling Design</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Bedroom POP Ceiling">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.24.jpeg" alt="POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Bedroom Ceiling</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Sitting Room POP Ceiling">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.25.jpeg" alt="POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Sitting Room Ceiling</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="POP Ceiling Finish">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.29.jpeg" alt="POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Premium Ceiling Finish</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Office POP Ceiling">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.32.jpeg" alt="POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Office Ceiling</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="POP Ceiling Design">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.33.jpeg" alt="POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Ceiling Design</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="building" data-title="Luxury POP Ceiling">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.34.jpeg" alt="POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Building</span><div class="p-label">Luxury Ceiling</div></div></div>
+        </div>
+      </div>
+
+      <!-- ===== P.O.P CEILING ===== -->
+      <div class="cat-header reveal" data-filter-cat="ceiling">
+        <h3>✨ P.O.P Ceiling Designs</h3>
+        <div class="cat-line"></div>
+        <span class="cat-badge">Plaster of Paris</span>
+      </div>
+
+      <div class="portfolio-masonry" id="galleryCeiling">
+        <div class="p-item reveal" data-category="ceiling" data-title="Spiral POP Ceiling Design">
+          <img src="images/portfolio/pop-ceiling-spiral.jpg" alt="Spiral POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">P.O.P Ceiling</span><div class="p-label">Spiral Ceiling Design</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="ceiling" data-title="Blue LED POP Ceiling with Chandelier">
+          <img src="images/portfolio/pop-ceiling-blue-led.jpg" alt="Blue LED POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">P.O.P Ceiling</span><div class="p-label">Blue LED Ceiling</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="ceiling" data-title="Cove Lighting POP Ceiling — Interior View">
+          <img src="images/portfolio/pop-ceiling-cove-lighting.jpg" alt="Cove Lighting POP Ceiling" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">P.O.P Ceiling</span><div class="p-label">Cove Lighting Ceiling</div></div></div>
+        </div>
+      </div>
+
+      <!-- ===== WROUGHT IRON & STAINLESS RAILS ===== -->
+      <div class="cat-header reveal" data-filter-cat="iron">
+        <h3>⚒️ Wrought Iron &amp; Stainless Handrail</h3>
+        <div class="cat-line"></div>
+        <span class="cat-badge">Gates, Fences &amp; Rails</span>
+      </div>
+
+      <div class="portfolio-masonry" id="galleryIron">
+        <div class="p-item reveal" data-category="iron" data-title="Decorative Wrought Iron Gate" data-index="31">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.36 (1).jpeg" alt="Wrought Iron" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Wrought Iron</span><div class="p-label">Decorative Iron Gate</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="iron" data-title="Stainless Steel Handrail" data-index="32">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.37.jpeg" alt="Stainless Rail" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Stainless Rail</span><div class="p-label">Stainless Handrail</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="iron" data-title="Iron Fence & Gate" data-index="33">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.38 (1).jpeg" alt="Iron fence" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Wrought Iron</span><div class="p-label">Iron Fence &amp; Gate</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="iron" data-title="Balcony Railing" data-index="34">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.40.jpeg" alt="Balcony railing" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Stainless Rail</span><div class="p-label">Balcony Railing</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="iron" data-title="Iron Protector / Window Guard" data-index="35">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.41.jpeg" alt="Window guard" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Wrought Iron</span><div class="p-label">Window Protector</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="iron" data-title="Staircase Handrail" data-index="36">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.42 (1).jpeg" alt="Staircase rail" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Stainless Rail</span><div class="p-label">Staircase Handrail</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="iron" data-title="Wrought Iron Works" data-index="37">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.42.jpeg" alt="Iron works" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Wrought Iron</span><div class="p-label">Iron Works</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="iron" data-title="Ornamental Gate" data-index="38">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.44.jpeg" alt="Ornamental gate" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Wrought Iron</span><div class="p-label">Ornamental Gate</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="iron" data-title="Iron Railing" data-index="39">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.45.jpeg" alt="Iron railing" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Wrought Iron</span><div class="p-label">Iron Railing</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="iron" data-title="Security Gate" data-index="40">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.46.jpeg" alt="Security gate" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Wrought Iron</span><div class="p-label">Security Gate</div></div></div>
+        </div>
+      </div>
+
+      <!-- ===== ALUMINIUM & GENERAL WORKS ===== -->
+      <div class="cat-header reveal" data-filter-cat="aluminium">
+        <h3>🪟 Aluminium Works &amp; General Merchandise</h3>
+        <div class="cat-line"></div>
+        <span class="cat-badge">Windows, Doors &amp; More</span>
+      </div>
+
+      <div class="portfolio-masonry" id="galleryAluminium">
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Window Installation" data-index="41">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.47.jpeg" alt="Aluminium windows" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Window Installation</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Door" data-index="42">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.48.jpeg" alt="Aluminium door" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Door</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Works" data-index="43">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.50.jpeg" alt="Aluminium works" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Works</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Shop Front Aluminium" data-index="44">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.54.jpeg" alt="Shop front" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Shop Front</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Partition" data-index="45">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.55.jpeg" alt="Partition" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Partition</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Installation" data-index="46">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.57.jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Installation</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Casement Window" data-index="47">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.39.59.jpeg" alt="Casement window" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Casement Window</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Sliding Window" data-index="48">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.01.jpeg" alt="Sliding window" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Sliding Window</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Works" data-index="49">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.02.jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Works</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Entrance Door" data-index="50">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.03.jpeg" alt="Entrance door" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Entrance Door</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Frame Works" data-index="51">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.04 (1).jpeg" alt="Frame works" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Frame Works</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Project" data-index="52">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.04.jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Project</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Installation" data-index="53">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.06.jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Installation</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Doors & Windows" data-index="54">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.08.jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Doors &amp; Windows</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Works" data-index="55">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.11 (1).jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Works</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Finishing" data-index="56">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.11.jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Finishing</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Project" data-index="57">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.16 (1).jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Project</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Installation" data-index="58">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.16.jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Installation Works</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Works" data-index="59">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.18.jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Works</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Project" data-index="60">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.19.jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Project</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Works" data-index="61">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.21.jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Works</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="Aluminium Installation" data-index="62">
+          <img src="images/portfolio/WhatsApp Image 2026-10-23 at 14.40.22.jpeg" alt="Aluminium" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Aluminium</span><div class="p-label">Aluminium Installation</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="AI Reference Design A" data-index="63">
+          <img src="images/portfolio/Gemini_Generated_Image_x2zo6ex2zo6ex2zo.jpg" alt="Design reference" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Design</span><div class="p-label">Design Reference A</div></div></div>
+        </div>
+        <div class="p-item reveal" data-category="aluminium" data-title="AI Reference Design B" data-index="64">
+          <img src="images/portfolio/Gemini_Generated_Image_ya6zjnya6zjnya6z (1).jpg" alt="Design reference" loading="lazy">
+          <div class="p-overlay"><div><span class="p-cat">Design</span><div class="p-label">Design Reference B</div></div></div>
+        </div>
+      </div>
+
+    </div><!-- end container -->
+  </section>
+
+  <!-- ====== CTA BANNER ====== -->
+  <section class="cta-banner">
+    <div class="container reveal">
+      <h2>Like What You See?</h2>
+      <p>Contact us today to discuss your project and get a free quote. Let's build something amazing together.</p>
+      <a href="mailto:thompsomenwadike@gmail.com?subject=Project%20Inquiry%20-%20Ebonics%20Integrated%20Services" class="btn btn-primary">Get a Free Quote →</a>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Ebonics Logo">
+            <div class="logo-text">
+              <span class="brand-name">EBONICS</span>
+              <span class="brand-tagline">Integrated Services Nig Ltd</span>
+            </div>
+          </a>
+          <p>Your trusted partner for quality building construction, interior design, aluminium works, and general merchandise in Anambra State, Nigeria.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="Instagram">📸</a>
+            <a href="#" aria-label="WhatsApp">💬</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Our Services</h4>
+          <ul>
+            <li><a href="services.html">Building Houses</a></li>
+            <li><a href="services.html">Interior Design</a></li>
+            <li><a href="services.html">Aluminium Works</a></li>
+            <li><a href="services.html">P.O.P Ceiling</a></li>
+            <li><a href="services.html">Wrought Iron</a></li>
+            <li><a href="services.html">Surveying</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact Info</h4>
+          <ul>
+            <li>📍 No 1 Hon. Nwadike Close, Ozalla Layout Umunya, Anambra State</li>
+            <li>📧 <a href="mailto:thompsomenwadike@gmail.com">thompsomenwadike@gmail.com</a></li>
+            <li>📱 <a href="tel:+2349032226515">+234 903 222 6515</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Ebonics Integrated Services Nig Ltd. All Rights Reserved.</p>
+        <p>Designed with ❤️ in Nigeria</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====== LIGHTBOX ====== -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">&#8249;</button>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">&#8250;</button>
+    <span class="lightbox-counter" id="lightboxCounter"></span>
+    <img src="" alt="" id="lightboxImage">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // ---- Enhanced Portfolio Lightbox with navigation ----
+    const items = Array.from(document.querySelectorAll('.p-item'));
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightboxImage');
+    const lbCaption = document.getElementById('lightboxCaption');
+    const lbCounter = document.getElementById('lightboxCounter');
+    const lbClose = document.getElementById('lightboxClose');
+    const lbPrev = document.getElementById('lightboxPrev');
+    const lbNext = document.getElementById('lightboxNext');
+    let currentIdx = 0;
+    let visibleItems = [];
+
+    function openLightbox(idx) {
+      visibleItems = items.filter(el => el.style.display !== 'none');
+      currentIdx = idx;
+      showSlide(currentIdx);
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function showSlide(idx) {
+      const item = visibleItems[idx];
+      if (!item) return;
+      const img = item.querySelector('img');
+      const title = item.getAttribute('data-title') || 'Project';
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lbCaption.textContent = title;
+      lbCounter.textContent = `${idx + 1} / ${visibleItems.length}`;
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    items.forEach((item, i) => {
+      item.addEventListener('click', () => {
+        visibleItems = items.filter(el => el.style.display !== 'none');
+        const vIdx = visibleItems.indexOf(item);
+        openLightbox(vIdx >= 0 ? vIdx : 0);
+      });
+    });
+
+    lbClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+
+    lbNext.addEventListener('click', () => {
+      currentIdx = (currentIdx + 1) % visibleItems.length;
+      showSlide(currentIdx);
+    });
+
+    lbPrev.addEventListener('click', () => {
+      currentIdx = (currentIdx - 1 + visibleItems.length) % visibleItems.length;
+      showSlide(currentIdx);
+    });
+
+    document.addEventListener('keydown', e => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') { currentIdx = (currentIdx + 1) % visibleItems.length; showSlide(currentIdx); }
+      if (e.key === 'ArrowLeft') { currentIdx = (currentIdx - 1 + visibleItems.length) % visibleItems.length; showSlide(currentIdx); }
+    });
+
+    // ---- Filter buttons ----
+    const filterBtns = document.querySelectorAll('#portfolioFilter button');
+    const catHeaders = document.querySelectorAll('[data-filter-cat]');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.getAttribute('data-filter');
+
+        items.forEach(item => {
+          const cat = item.getAttribute('data-category');
+          const show = f === 'all' || cat === f;
+          item.style.display = show ? '' : 'none';
+        });
+
+        catHeaders.forEach(h => {
+          const hCat = h.getAttribute('data-filter-cat');
+          h.style.display = (f === 'all' || f === hCat) ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
